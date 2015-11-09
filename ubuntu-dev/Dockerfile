@@ -12,4 +12,4 @@ RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 58118E89F3A912897C0
     rm -rf /var/lib/apt/lists/*
     
 # Add unsecure local registry
-RUN  echo 'DOCKER_OPTS="--insecure-registry myregistry:5000"' >> /etc/default/docker
+RUN  echo 'DOCKER_OPTS="$DOCKER_OPTS --insecure-registry myregistry:5000"' >> /etc/default/docker
