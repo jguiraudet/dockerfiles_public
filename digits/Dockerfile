@@ -68,23 +68,37 @@ ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/
   DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
 
 # Clone DIGITS and move into it
-RUN cd /root && git clone https://github.com/NVIDIA/DIGITS.git digits && cd digits && \
+RUN cd /root && git clone http://github.com/NVIDIA/DIGITS.git digits && cd digits && \
 # Install python dependencies
-  for req in $(cat requirements.txt); do pip install $req; done
+  for req in $(cat requirements.txt requirements_test.txt); do pip install $req; done
 
 
 # install custom packages for torch
-RUN luarocks install "https://raw.github.com/deepmind/torch-hdf5/master/hdf5-0-0.rockspec" &&\
-    luarocks install "https://raw.github.com/Sravan2j/lua-pb/master/lua-pb-scm-0.rockspec" &&\
+RUN luarocks install "http://raw.github.com/deepmind/torch-hdf5/master/hdf5-0-0.rockspec" &&\
+    luarocks install "http://raw.github.com/Sravan2j/lua-pb/master/lua-pb-scm-0.rockspec" &&\
     luarocks install image  &&\
     luarocks install lightningmdb LMDB_INCDIR=/usr/include LMDB_LIBDIR=/usr/lib/x86_64-linux-gnu
 
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qqy install \
+        nginx \
+        supervisor && \
+    mkdir /var/log/digits
+
+
+#### Copy files
 COPY test.sh /root/test.sh
+COPY etc     /etc
+COPY var     /var
 
 # Expose server port
 EXPOSE 34448
 # Set ~/digits as working directory
 WORKDIR /root/digits
-# Start server
-CMD ["/root/digits/digits-server"]
+
+# Run all processes through supervisord
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
+# Logs do not need to be preserved when exporting
+VOLUME ["/var/log"]
+
