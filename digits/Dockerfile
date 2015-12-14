@@ -93,8 +93,11 @@ COPY var     /var
 
 # Expose server port
 EXPOSE 34448
-# Set ~/digits as working directory
-WORKDIR /root/digits
+
+# Set the application working directory
+WORKDIR /home/docker-app
+
+RUN ln -s /home/docker-app/digits/jobs /root/digits/digits/jobs
 
 # Run all processes through supervisord
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
