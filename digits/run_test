@@ -5,7 +5,7 @@
 # due to memory allocation errors.
 
 # Select on which GPU(s) digits will run
-export GPU=0 
+export GPU=0,1,2,3
 
 DIR=${0%${0##*/}}
 time ${DIR}/../../nvidia-docker/nvidia-docker run --name test-digits --rm -ti jguiraudet/digits bash /root/test.sh |& tee test-digits.log

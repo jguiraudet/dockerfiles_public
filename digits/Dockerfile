@@ -83,11 +83,11 @@ RUN luarocks install "http://raw.github.com/deepmind/torch-hdf5/master/hdf5-0-0.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -qqy install \
         nginx \
         supervisor && \
-    mkdir /var/log/digits
+        mkdir /var/log/digits
 
 
 #### Copy files
-COPY test.sh /root/test.sh
+COPY root    /root
 COPY etc     /etc
 COPY var     /var
 
