@@ -1,0 +1,15 @@
+#!/bin/bash
+# Execute the tests in a temporary docker container. Delete it afterwards.
+#
+# /!\ Make sure no other application is running on the GPU otherwise some tests may fail
+# due to memory allocation errors.
+
+# Select on which GPU(s) digits will run
+export GPU=0 
+
+DIR=${0%${0##*/}}
+time ${DIR}/../../nvidia-docker/nvidia-docker run --name test-digits --rm -ti jguiraudet/digits bash /root/test.sh |& tee test-digits.log
+
+
+
+
