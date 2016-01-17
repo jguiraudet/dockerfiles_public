@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker network create --driver bridge dmz_nw  ### isolated network
+docker run -d -p 80:80 --restart=always --name jekyll-dev -v $HOME/ws/web/jguiraudet.github.io:/root/site:ro --net dmz_nw jguiraudet/jekyll-dev
+
