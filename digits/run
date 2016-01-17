@@ -7,7 +7,7 @@ DIR=${0%${0##*/}}
 
 mkdir -p $HOME/docker-app/digits/jobs
 
-ID=$(${DIR}/../../nvidia-docker/nvidia-docker run --name digits -d -v $HOME/docker-app/digits:/home/docker-app/digits jguiraudet/digits)
+ID=$(${DIR}/../../nvidia-docker/nvidia-docker run --name digits -d --restart=always -v $HOME/docker-app/digits:/home/docker-app/digits jguiraudet/digits)
 IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $ID)
 echo "Starting web browser at http://$IP:8080 (Container $ID)"
 sensible-browser $IP:8080
