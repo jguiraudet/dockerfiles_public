@@ -25,11 +25,9 @@ RUN	apt-get update &&\
 # Don't install documentation  
 	echo "gem: --no-ri --no-rdoc" > ~/.gemrc &&\
 	gem install jekyll --no-ri --no-rdoc
-COPY   root /root
 
-VOLUME /root/site
-VOLUME /etc/letsencrypt
-EXPORT 80
+VOLUME /root/site /etc/letsencrypt
+EXPOSE 80
 CMD bash -c "if [ ! -e /root/site/_config.yml ]; then jekyll new site; fi; nginx; \
 	while true ; do inotifywait -e create -e modify  /root/site; jekyll build --draft -s site -d /usr/share/nginx/html/; done"
 
