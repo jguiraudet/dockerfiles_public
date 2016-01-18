@@ -26,8 +26,12 @@ RUN	apt-get update &&\
 	echo "gem: --no-ri --no-rdoc" > ~/.gemrc &&\
 	gem install jekyll --no-ri --no-rdoc
 
+RUN     apt-get -y install inotify-tools
+
+COPY etc /etc
+
 VOLUME /root/site /etc/letsencrypt
-EXPOSE 80
+EXPOSE 80 443
 CMD bash -c "if [ ! -e /root/site/_config.yml ]; then jekyll new site; fi; nginx; \
-	while true ; do inotifywait -e create -e modify  /root/site; jekyll build --draft -s site -d /usr/share/nginx/html/; done"
+	while true ; do jekyll build --draft -s site -d /usr/share/nginx/html/; inotifywait -r -e create -e modify  /root/site; done"
 
