@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Run interactively
+docker run -ti -p 80:80 -p 443:443 --name letsencrypt jguiraudet/letsencrypt
+
