@@ -79,12 +79,40 @@ RUN luarocks install "http://raw.github.com/deepmind/torch-hdf5/master/hdf5-0-0.
     luarocks install image  &&\
     luarocks install lightningmdb LMDB_INCDIR=/usr/include LMDB_LIBDIR=/usr/lib/x86_64-linux-gnu
 
-
+# Install webserver and deamon supervisor:
 RUN DEBIAN_FRONTEND=noninteractive apt-get -qqy install \
         nginx \
         supervisor && \
         mkdir /var/log/digits
 
+
+# Install OpenCV from source
+RUN apt-add-repository ppa:mc3man/trusty-media &&\
+    apt-get update && \
+    version="$(wget -q -O - http://sourceforge.net/projects/opencvlibrary/files/opencv-unix | egrep -m1 -o '\"[0-9](\.[0-9]+)+' | cut -c2-)" &&\
+    echo "OpenCV last version available=$version"  &&\
+    version=3.1.0  &&\
+    echo "Installing OpenCV" $version  &&\
+    mkdir /root/OpenCV  &&\
+    cd /root/OpenCV  &&\
+    echo "Removing any pre-installed ffmpeg and x264"  &&\
+    sudo apt-get -qq remove ffmpeg x264 libx264-dev &&\
+    echo "Installing Dependencies" &&\
+    sudo apt-get -y install libopencv-dev build-essential checkinstall cmake pkg-config yasm libjpeg-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libxine-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev python-dev python-numpy libtbb-dev libqt4-dev libgtk2.0-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils ffmpeg cmake qt5-default checkinstall  &&\
+    echo "Downloading OpenCV" $version  &&\
+    wget -O OpenCV-$version.zip http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/$version/opencv-"$version".zip/download  &&\
+    echo "Installing OpenCV" $version  &&\
+    unzip OpenCV-$version.zip  &&\
+    cd opencv-$version  &&\
+    mkdir /root/OpenCV/opencv-$version/build 
+
+RUN cd /root/OpenCV/opencv-3.1.0/build &&\
+    cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D -DBUILD_CUDA=ON -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda/lib64 ..   &&\
+    make -j12 &&\
+    sudo checkinstall -y &&\
+    sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'  &&\
+    sudo ldconfig  &&\
+    echo "OpenCV $version ready to be used" 
 
 #### Copy files
 COPY root    /root
