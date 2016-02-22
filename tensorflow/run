@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
+
+nvidia-modprobe -u -c=0
+
+docker run --name=tensorflow -d --restart=always -p 8888:8888 $(\ls /usr/lib/x86_64-linux-gnu/libcuda* | xargs -I{} echo '-v {}:{}')   --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/null:/dev/raw1394 -v /data/tensorflow:/slow_scratch -w /slow_scratch jguiraudet/tensorflow
+
+
+
+
+
