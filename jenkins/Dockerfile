@@ -16,6 +16,6 @@ RUN usermod jenkins -G shadow &&\
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 USER jenkins
 
-#ENV JENKINS_OPTS --prefix=jenkins
+
 
 
