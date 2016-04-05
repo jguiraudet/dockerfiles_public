@@ -1,0 +1,15 @@
+#!/bin/bash
+# See https://hub.docker.com/_/jenkins/
+
+
+# Start the deamon with a persistant volume in the container
+# use docker cp jenkins:/var/jenkins_home to extract the container data
+ID=$(docker run -d --name jenkins -p 49001:8080 --restart="on-failure" jguiraudet/jenkins)
+
+IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $ID)
+echo "Container $ID started"
+
+echo "Starting web browser at http://$IP:8080/login"
+sensible-browser http://$IP:8080/login
+
+

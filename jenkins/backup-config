@@ -1,0 +1,5 @@
+#!/bin/bash
+# Backup the current root configuration in the container definition files
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"  # Get directory containing this script
+docker cp jenkins:/var/jenkins_home/config.xml  $DIR/usr/share/jenkins/ref
