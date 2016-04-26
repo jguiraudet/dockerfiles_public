@@ -17,6 +17,7 @@
 # Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
 ##
 
+
 server {
 	listen 80 default_server;
         server_name guiraudet.com www.guiraudet.com;
@@ -49,8 +50,8 @@ server {
         index index.html index.htm;
 
 	ssl on;
-        ssl_certificate     /etc/letsencrypt/live/www.guiraudet.com/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/www.guiraudet.com/privkey.pem;
+        ssl_certificate     /etc/letsencrypt/live/guiraudet.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/guiraudet.com/privkey.pem;
 
 	ssl_session_timeout 5m;
 
@@ -68,4 +69,7 @@ server {
 		try_files $uri $uri/ =404;
 	}
 }
+
+
+
 

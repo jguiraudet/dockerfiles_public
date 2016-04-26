@@ -1,5 +1,5 @@
 
-FROM b.gcr.io/tensorflow/tensorflow-gpu
+FROM jguiraudet/tensorflow-gpu
 MAINTAINER Jean-Marc Guiraudet <jguiraudet@gmail.com>
 
 

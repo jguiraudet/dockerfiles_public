@@ -15,7 +15,7 @@ RUN usermod jenkins -G shadow &&\
 
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 USER jenkins
-
+RUN ssh-keygen -t rsa -N "" -f /var/jenkins_home/.ssh/id_rsa -C "Jenkins master ssh key"
 
 
 

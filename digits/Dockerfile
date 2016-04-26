@@ -127,6 +127,8 @@ WORKDIR /home/docker-app
 
 RUN ln -s /home/docker-app/digits/jobs /root/digits/digits/jobs
 
+ENV TERM=xterm
+
 # Run all processes through supervisord
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 

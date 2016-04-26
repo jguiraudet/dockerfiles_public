@@ -7,7 +7,10 @@
 ID=$(docker run -d --name jenkins -p 49001:8080 --restart="on-failure" --env JENKINS_OPTS="--prefix=/jenkins" jguiraudet/jenkins)
 
 IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $ID)
-echo "Container $ID started"
+echo "Container $ID started."
+echo
+echo "Jenkins master public key:"
+docker exec -ti jenkins cat /var/jenkins_home/.ssh/id_rsa.pub
 
 echo "Starting web browser at http://$IP:8080/jenkins/login"
 sensible-browser http://$IP:8080/jenkins/login
