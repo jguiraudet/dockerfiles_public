@@ -1,0 +1,14 @@
+#
+# Initialize all the containers and its environment
+#
+
+echo "Create a local docker network..."
+docker network create robot
+
+
+echo
+echo "Create containers..."
+./docker-data-jupyter
+./docker-jupyter  
+./docker-reverse-proxy
+

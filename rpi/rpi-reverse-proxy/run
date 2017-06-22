@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Select on which GPU(s) digits will run
+export GPU=0 
+
+DIR=${0%${0##*/}}
+
+mkdir -p $HOME/docker-app/digits/jobs
+
+nvidia-modprobe -u -c=0 # Load uvm driver
+
+ID=$(docker run --name digits2 --privileged -d --restart=always -v /dev/video0:/dev/video0 \
+      -v $HOME/docker-app/digits:/home/docker-app/digits \
+      $(for d in `ls -d /dev/nv* /dev/dri 2> /dev/null`; do echo --device $d:$d; done) \
+      jguiraudet/digits)
+IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $ID)
+echo "Starting web browser at http://$IP:8080 (Container $ID)"
+sensible-browser $IP:8080
+
+
+
+

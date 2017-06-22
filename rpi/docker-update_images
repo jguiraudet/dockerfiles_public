@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Update docker image from the registry and restart the container if needed
+#
+# Based on http://stackoverflow.com/questions/26423515/how-to-automatically-update-your-docker-containers-if-base-images-are-updated
+#
+#
+
+set -e
+#BASE_IMAGE="rpi-jupyter"
+#REGISTRY="registry.guiraudet.com:5000"
+
+#IMAGE="$REGISTRY/$BASE_IMAGE"
+#docker pull $IMAGE
+
+for im in $(docker ps -q)
+do
+    IMAGE=`docker inspect --format "{{.Config.Image}}" $im`
+    echo "Image:  $IMAGE"
+    docker pull $IMAGE
+    LATEST=`docker inspect --format "{{.Id}}" $IMAGE`
+    RUNNING=`docker inspect --format "{{.Image}}" $im`
+    NAME=`docker inspect --format '{{.Name}}' $im | sed "s/\///g"`
+    echo $NAME
+    echo "Latest: " $LATEST
+    echo "Running:" $RUNNING
+    if [ "$RUNNING" != "$LATEST" ];then
+        echo "upgrading \"$NAME\"..."
+        docker rm -f $NAME
+        ./docker-$NAME
+    else
+        echo "container \"$NAME\" is up to date."
+    fi
+done

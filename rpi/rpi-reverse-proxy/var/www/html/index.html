@@ -1,0 +1,111 @@
+<html>
+<head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+<style type="text/css">
+body {
+  background-color: #e0675f;
+  font-family: 'Raleway', sans-serif;
+}
+
+#host {
+  color: white;
+}
+
+.main-logo {
+  width: 200px;
+}
+
+.resbaz-logo {
+  width: 40px;
+}
+
+.list-label {
+  margin-left: 15%;
+}
+
+.list-group, .well {
+  width: 20em;
+}
+
+.top-spacer {
+  height: 30%;
+}
+
+.well {
+  background-color: white;
+}
+
+</style>
+<script type="text/javascript">
+$(function() {
+  var isIP = /^\d+\./.test(window.location.host);
+  if (isIP) {
+    $('#host').text(window.location.host);
+  } else {
+    var host = window.location.host.replace(/\..*$/, "");
+    var domain = window.location.host.replace(/^[^\.]+\./, "");
+    $('#host').text(host);
+    $('#parent-link').attr('href', window.location.protocol+"//"+domain+"/");
+  }
+});
+
+function setHref() {
+document.getElementById('jupyter-url').href = window.location.protocol + "//" + window.location.hostname + ":8888/jupyter/";
+}
+
+</script>
+</head>
+<body onload="setHref()">
+
+<div class="container">
+<div class="row hidden-xs top-spacer">
+  
+</div>
+<div class="row">
+<div class="col-sm-offset-2 col-sm-4">
+
+<a id="parent-link" href="#">
+  Robot container
+</a>
+<h4 id="host" class="text-center"></h4>
+
+</div>  
+
+<div class="col-sm-4">
+
+<br class="hidden-xs"/>
+<br class="hidden-xs"/>
+
+<!-- Common tools -->
+<div class="list-group center-block">
+  <a class="list-group-item" href="/jupyter"  id="jupyter-url" target="_blank">
+    <!-- <span class="fa-stack fa-lg">
+      <i class="fa fa-square fa-stack-2x"></i>
+      <i class="fa fa-picture-o fa-stack-1x fa-inverse"></i>
+    </span> -->
+    <img src="jupyter.ico" height="37" width="37" >
+    <span class="list-label">
+      Jupyter notebook
+    </span>
+  </a>
+  <a class="list-group-item" href="/camera/640x480.mjpg" target="_blank">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-square fa-stack-2x"></i>
+      <i class="fa fa-camera fa-stack-1x fa-inverse"></i>
+    </span>
+    <span class="list-label">
+       Camera
+    </span>
+  </a>
+</div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+#!/bin/bash
+docker create -v /home/jupyter --name data-jupyter registry.guiraudet.com:5000/rpi-jupyter:latest
+

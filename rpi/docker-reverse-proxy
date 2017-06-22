@@ -1,0 +1,5 @@
+#!/bin/bash
+docker run -d --restart=always -p 80:80 --name reverse-proxy --net robot registry.guiraudet.com:5000/rpi-reverse-proxy:latest
+
+echo "Reverse proxy running at $(docker inspect --format '{{ .NetworkSettings.Networks.robot.IPAddress }}' reverse-proxy)"
+

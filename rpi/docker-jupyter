@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if  grep Raspberry /proc/device-tree/model&>/dev/null ; 
+then 
+DEV='--privileged --volume /dev:/dev'
+else 
+DEV='--privileged --device /dev/video0:/dev/video0'
+fi
+DEV='--privileged --volume /dev:/dev'
+
+docker run -p 8888:8888 -d --volumes-from data-jupyter $DEV --restart=always --name jupyter --net robot registry.guiraudet.com:5000/rpi-jupyter:latest
+
