@@ -15,6 +15,13 @@ import re
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 import RPi.GPIO as GPIO
 
+
+# Define LED mapping
+LED_RED=0
+LED_BLUE_TOP=1
+LED_BLUE_BOTTON=2
+LED_PROJECTOR=3
+
 class Robot(object):
 
     # List of the body position sensing swithes from front to back
@@ -93,7 +100,26 @@ class Robot(object):
         GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.switch = self.body_input(debouncing=False)        
         self.posture = Robot.body_switch.index(self.switch)
-        
+        # Turn off all the LED
+        self._mh.setPin(0,1)  # Red
+        self._mh.setPin(1,1)  # Blue bottom
+        self._mh.setPin(14,1) # Blue top
+        self._mh.setPin(15,1) # Projector
+        self.led_value=[0,0,0,0]
+
+    def set_led(self, index, value):
+        assert 0 <= index <= 3,    'index should be from 0 to 3.'
+        assert 0 <= value <= 4096, 'value should be between 0 and 4096.'
+        index = (0,1,14,15)[index]
+        if value == 0:
+            self._mh._pwm.setPWM(index, 4096, 0)
+        else:
+            self._mh._pwm.setPWM(index, 0, 4096-value)
+        self.led_value[index]=value
+
+    def get_led(self, index):
+        assert 0 <= index <= 3,    'index should be from 0 to 3.'
+        return self.led_value[index]
         
     def button(self):
         return GPIO.input(13)
@@ -123,9 +149,12 @@ class Robot(object):
         if speed < 0:
              speed = -speed
              self._left.run(Adafruit_MotorHAT.BACKWARD)
-        else:
+             self._left.setSpeed(speed)
+        elif speed > 0:
              self._left.run(Adafruit_MotorHAT.FORWARD)
-        self._left.setSpeed(speed)
+             self._left.setSpeed(speed)
+        else:
+             self._left.run(Adafruit_MotorHAT.RELEASE)
 
     def _right_speed(self, speed):
         """Set the speed of the right motor, taking into account its trim offset.
@@ -136,9 +165,13 @@ class Robot(object):
         if speed < 0:
              speed = -speed
              self._right.run(Adafruit_MotorHAT.BACKWARD)
-        else:
+             self._right.setSpeed(speed)
+        elif speed > 0:
              self._right.run(Adafruit_MotorHAT.FORWARD)
-        self._right.setSpeed(speed)
+             self._right.setSpeed(speed)
+        else:
+             self._right.run(Adafruit_MotorHAT.RELEASE)
+        
 
     def _body_speed(self, speed):
         """Set the speed of the body inclination motor.
@@ -252,6 +285,7 @@ class Robot(object):
             return float(m.group(1))
 
             
+
 
 
 

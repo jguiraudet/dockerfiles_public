@@ -41,10 +41,8 @@ RUN mkdir -p /home/snap && cd /home/snap &&\
 
 WORKDIR /home/snap
  
-ADD snap-server.py /home/snap/snap-server.py
-ADD Robot.py /home/snap/Robot.py
-ADD robot.xml /home/snap/static/robot.xml
-ADD index.html /home/snap/static/index.html
+ADD server/ /home/snap/
+ADD static/      /home/snap/static/
 
 CMD python3 /home/snap/snap-server.py
 
