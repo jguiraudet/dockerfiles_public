@@ -11,4 +11,5 @@ echo "Create containers..."
 ./docker-data-jupyter
 ./docker-jupyter  
 ./docker-reverse-proxy
+./docker-snap
 

@@ -1,0 +1,107 @@
+<blocks app="Snap! 4.0, http://snap.berkeley.edu" version="1">
+
+<block-definition s="key: %'key' value: %'value'" type="reporter" category="operators">
+<header></header><code></code>
+<inputs>
+    <input type="%s"></input>
+    <input type="%s"></input>
+</inputs>
+<script>
+<block s="doReport">
+    <block s="reportNewList">
+        <list>
+            <block var="key"/>
+            <block var="value"/>
+        </list>
+    </block>
+</block>
+</script>
+</block-definition>
+
+<block-definition s="%'method' url: %'url' data: %'data'" type="reporter" category="sensing">
+<header></header><code></code>
+<inputs>
+    <input type="%s" readonly="true">GET
+    <options>GET
+    POST
+    PUT
+    DELETE
+    PATCH</options>
+    </input>
+    <input type="%s">base</input>
+    <input type="%mult%l" readonly="true"></input>
+</inputs>
+<script>
+<block s="doReport"><block s="evaluate"><block s="reportJSFunction"><list><l>method</l><l>url</l><l>data</l><l>proc</l></list><l>var response;
+;if (!proc.httpRequest) {
+  var item, i, header;
+  var data_obj={};
+
+  proc.httpRequest = new XMLHttpRequest();
+  proc.httpRequest.open(method, url, true);
+  if(data.length()&gt;0){
+  proc.assertType(data, 'list');
+  for (i = 1; i &lt;= data.length(); i += 1) {
+    item = data.at(i);
+    proc.assertType(item, 'list');
+    data_obj[item.at(1)]= item.at(2);
+  }
+  data=JSON.stringify(data_obj);
+  }
+  proc.httpRequest.setRequestHeader('Content-Type', 'application/json');
+  proc.httpRequest.send(data || null);
+} else if (proc.httpRequest.readyState === 4) {
+  response = proc.httpRequest.responseText;
+  proc.httpRequest = null;
+  return response;
+}
+proc.pushContext('doYield');
+proc.pushContext();</l></block><list><block var="method"/><block var="url"/><block var="data"/></list></block></block></script></block-definition>
+<block-definition s="camera motion" type="reporter" category="sensing">
+<header></header><code></code>
+<inputs>
+</inputs><script>
+<block s="doReport"><custom-block s="%s url: %s data: %mult%l"><l>GET</l><l>camera/motion</l><list></list></custom-block></block></script></block-definition>
+<block-definition s="$robot move base left: %'left' right: %'right' duration: %'duration'" type="command" category="motion">
+<header></header><code></code>
+<inputs>
+    <input type="%n">60</input>
+    <input type="%n">-60</input>
+    <input type="%n">1.0</input>
+</inputs>
+<script>
+<block s="doReport"><custom-block s="%s url: %s data: %mult%l"><l>PATCH</l><l>base</l><list><custom-block s="key: %s value: %s"><l>left</l><block var="left"/></custom-block><custom-block s="key: %s value: %s"><l>right</l><block var="right"/></custom-block><custom-block s="key: %s value: %s"><l>duration</l><block var="duration"/></custom-block></list></custom-block></block></script></block-definition>
+<block-definition s="$robot body position: %'position' speed: %'speed'" type="command" category="motion">
+<header></header><code></code>
+<inputs>
+    <input type="%n">7</input>
+    <input type="%n">100</input>
+</inputs>
+<script>
+<block s="doReport"><custom-block s="%s url: %s data: %mult%l"><l>PATCH</l><l>body</l><list><custom-block s="key: %s value: %s"><l>speed</l><l>100</l></custom-block><custom-block s="key: %s value: %s"><l>position</l><l>7</l></custom-block></list></custom-block></block></script></block-definition>
+<block-definition s="$robot led: %'led' value: %'value'" type="command" category="looks">
+<header></header><code></code>
+<inputs>
+<input type="%n">0<options>0
+1
+2
+3</options></input>
+<input type="%n">4096</input>
+</inputs>
+<script>
+<block s="doReport"><custom-block s="%s url: %s data: %mult%l"><l>PATCH</l><block s="reportJoinWords"><list><l>led/</l><block var="led"/></list></block><list><custom-block s="key: %s value: %s"><l>value</l><block var="value"/></custom-block></list></custom-block></block></script></block-definition>
+<block-definition s="Speak %'text' %'voice'" type="command" category="sound">
+<header></header><code></code>
+<inputs>
+    <input type="%s">Hello !</input>
+    <input type="%n">1</input>
+</inputs>
+<script>
+<block s="doRun"><block s="reportJSFunction"><list><l>text</l><l>voice</l></list><l>
+var voices = window.speechSynthesis.getVoices();
+var speechMessage = new SpeechSynthesisUtterance();
+speechMessage.voice = voices[voice];
+speechMessage.text  = text;
+ 
+window.speechSynthesis.speak(speechMessage);
+</l></block><list><block var="text"/><block var="voice"/></list></block></script></block-definition></blocks>

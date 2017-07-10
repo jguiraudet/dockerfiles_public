@@ -4,8 +4,7 @@ set -e
 
 PROXY=http://$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' squid):3128
 
-#for F in rpi-base rpi-jupyter rpi-reverse-proxy
-for F in rpi-base rpi-reverse-proxy rpi-jupyter 
+for F in rpi-base rpi-reverse-proxy rpi-jupyter  rpi-snap
 do
     echo
     echo "Building $F"

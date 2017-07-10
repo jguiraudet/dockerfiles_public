@@ -24,6 +24,6 @@ ENV TERM=xterm
 
 CMD ["/usr/sbin/nginx"]
 
-# Logs do not need to be preserved when exporting
-VOLUME ["/var/log"]
+## Logs do not need to be preserved when exporting
+#VOLUME ["/var/log"]
 

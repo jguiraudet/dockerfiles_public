@@ -47,7 +47,7 @@ RUN pip3 install matplotlib
 
 # OpenCV
 RUN apt-get install -y python-opencv python-flask v4l-utils v4l-conf
-
+RUN pip3 install flask
 
 WORKDIR /home/jupyter
 USER jupyter
