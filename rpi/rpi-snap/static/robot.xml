@@ -78,7 +78,15 @@ proc.pushContext();</l></block><list><block var="method"/><block var="url"/><blo
     <input type="%n">100</input>
 </inputs>
 <script>
-<block s="doReport"><custom-block s="%s url: %s data: %mult%l"><l>PATCH</l><l>body</l><list><custom-block s="key: %s value: %s"><l>speed</l><l>100</l></custom-block><custom-block s="key: %s value: %s"><l>position</l><l>7</l></custom-block></list></custom-block></block></script></block-definition>
+<block s="doReport">
+    <custom-block s="%s url: %s data: %mult%l"><l>PATCH</l><l>body</l>
+        <list>
+            <custom-block s="key: %s value: %s"><l>speed</l><l><block var="speed"/></l></custom-block>
+            <custom-block s="key: %s value: %s"><l>position</l><l><block var="position"/></l></custom-block>
+        </list>
+    </custom-block>
+</block>
+</script></block-definition>
 <block-definition s="$robot led: %'led' value: %'value'" type="command" category="looks">
 <header></header><code></code>
 <inputs>
@@ -89,7 +97,13 @@ proc.pushContext();</l></block><list><block var="method"/><block var="url"/><blo
 <input type="%n">4096</input>
 </inputs>
 <script>
-<block s="doReport"><custom-block s="%s url: %s data: %mult%l"><l>PATCH</l><block s="reportJoinWords"><list><l>led/</l><block var="led"/></list></block><list><custom-block s="key: %s value: %s"><l>value</l><block var="value"/></custom-block></list></custom-block></block></script></block-definition>
+<block s="doReport">
+    <custom-block s="%s url: %s data: %mult%l"><l>PATCH</l>
+    <block s="reportJoinWords"><list><l>led/</l><block var="led"/></list></block>
+    <list>
+        <custom-block s="key: %s value: %s"><l>value</l><block var="value"/>
+        </custom-block>
+    </list></custom-block></block></script></block-definition>
 <block-definition s="Speak %'text' %'voice'" type="command" category="sound">
 <header></header><code></code>
 <inputs>

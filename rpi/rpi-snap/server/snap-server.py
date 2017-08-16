@@ -63,6 +63,16 @@ def video_motion():
     return flask.Response(str(Camera.motion),
                     mimetype='text/plain')
 
+
+@app.route('/snap/camera/recording', methods = ['GET', 'POST'] )
+def recording():
+    if flask.request.method == 'GET':
+        return "ECHO: GET\n"
+    elif flask.request.method == 'POST':
+        if request.headers['Content-Type'] == 'text/plain':
+            Camera.recording(request.data)
+
+
 #######################################################################################
 # Robot control end-point
 

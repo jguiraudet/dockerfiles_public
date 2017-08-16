@@ -125,7 +125,11 @@ class Camera(object):
                 Camera.front_camera.close()
                 Camera.front_camera = None
            
-        
+    def recording(self, filename):
+        if not filename:
+            filename=None
+        Camera.front_camera.split_recording(filename, splitter_port=1)    
+
     def __init__(self):
         Camera.open_camera()
         Camera.client_count += 1

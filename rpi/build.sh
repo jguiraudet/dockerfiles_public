@@ -11,3 +11,6 @@ do
     docker build --build-arg http_proxy=$PROXY --tag=registry.guiraudet.com:5000/$F $F 
     docker push registry.guiraudet.com:5000/$F
 done
+
+ssh pi@rpi2  /home/pi/docker-update_images
+

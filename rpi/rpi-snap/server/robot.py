@@ -11,6 +11,7 @@
 import time
 import atexit
 import re
+import threading
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 import RPi.GPIO as GPIO
@@ -22,18 +23,18 @@ LED_BLUE_TOP=1
 LED_BLUE_BOTTON=2
 LED_PROJECTOR=3
 
-class Robot(object):
+class Robot(threading.Thread):
 
     # List of the body position sensing swithes from front to back
     body_switch = [
-        (1,1,0,0), # 0. Head on right
+        (1,1,0,0), # 0.  Head on right
         (1,1,0,1), # 1. 
-        (1,0,0,1), # 2. Head slight right
-        (1,0,1,1), # 3. Head front
-        (1,0,1,0), # 4. Head left
-        (0,0,1,0), # 5. Vertical
-        (1,0,1,0), # 6. Body slightly leaning down
-        (1,1,1,0)] # 7. Body leaning down
+        (1,0,0,1), # 2.  Head slight right
+        (1,0,1,1), # 3.  Head front
+        (1,0,1,0), # 4.  (Head left)
+        (0,0,1,0), # 5.  Vertical
+        (1,0,1,0), # 6.  (Body slightly leaning down)
+        (1,1,1,0)] # 7.  Body leaning down
 
     def body(self, speed, position):
         # Move the body/head to a given position
@@ -74,6 +75,8 @@ class Robot(object):
                          exit.  Default is True (highly recommended to keep this
                          value to prevent damage to the bot on program crash!).
         """
+        threading.Thread.__init__(self)
+
         # Initialize motor HAT and left, right motor.
         self._mh = Adafruit_MotorHAT(addr)
         self._left = self._mh.getMotor(left_id)
@@ -106,6 +109,21 @@ class Robot(object):
         self._mh.setPin(14,1) # Blue top
         self._mh.setPin(15,1) # Projector
         self.led_value=[0,0,0,0]
+
+        #self.set_led(LED_RED, 2048)
+        # Start the work thread
+        self.setDaemon(True)
+        self.start()
+
+    def run(self):
+        index = LED_RED
+        while True:
+            # BLink LED
+            self.set_led(index, 4096)
+            time.sleep(0.1)
+            self.set_led(index, 0)
+            time.sleep(4.0)
+
 
     def set_led(self, index, value):
         assert 0 <= index <= 3,    'index should be from 0 to 3.'
